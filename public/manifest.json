@@ -1,0 +1,25 @@
+{
+  "name": "My Walden Pond",
+  "short_name": "Walden Pond",
+  "description": "Offline-first daily reflection companion inspired by The Cure at Walden Pond",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#faf7f1",
+  "theme_color": "#1f3d34",
+  "categories": ["health", "lifestyle", "books"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
