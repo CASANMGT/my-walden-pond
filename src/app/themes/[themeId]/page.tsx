@@ -3,11 +3,12 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ArrowLeft, Check, ChevronRight, Target } from "lucide-react";
-import { AppHeader } from "@/components/AppShell";
+import { Check, ChevronRight, Target } from "lucide-react";
 import { PondIllustration } from "@/components/PondIllustration";
+import { DetailHeader } from "@/components/DetailHeader";
+import { AppHeader } from "@/components/AppShell";
 import { ThemeIcon } from "@/components/ThemeIcon";
-import { getThemeById } from "@/data/themes";
+import { getThemeById, themes } from "@/data/themes";
 import { getChapterByNumber } from "@/data/chapters";
 import { getProgress } from "@/lib/storage";
 
@@ -34,15 +35,11 @@ export default function ThemeDetailPage() {
     completed.includes(n)
   ).length;
   const nextChapter = theme.chapterNumbers.find((n) => !completed.includes(n));
+  const themeIndex = themes.findIndex((t) => t.id === themeId) + 1;
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-mist/60 bg-paper/90 px-4 py-3 backdrop-blur-md">
-        <Link href="/themes" className="flex items-center gap-2 text-sm text-ink/60">
-          <ArrowLeft className="h-4 w-4" />
-          Theme Library
-        </Link>
-      </header>
+      <DetailHeader backHref="/themes" backLabel="Themes" center={`Theme ${themeIndex}`} />
 
       <div className="card-elevated mx-4 mt-4 overflow-hidden rounded-3xl">
         <PondIllustration variant="banner" className="h-28 rounded-none" />
@@ -51,7 +48,9 @@ export default function ThemeDetailPage() {
             <ThemeIcon themeId={theme.id} />
             <span className="section-label">Theme</span>
           </div>
-          <h1 className="font-serif text-2xl text-pond-900">{theme.name}</h1>
+          <h1 className="font-serif text-2xl text-pond-900">
+            {themeIndex}. {theme.name}
+          </h1>
           <p className="mt-3 text-sm leading-relaxed text-ink/70">
             {theme.description}
           </p>

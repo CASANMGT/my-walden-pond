@@ -10,6 +10,7 @@ import Link from "next/link";
 function ReviewContent() {
   const params = useSearchParams();
   const chapterParam = params.get("chapter");
+  const replaceToday = params.get("replace") === "1";
   const progress = typeof window !== "undefined" ? getProgress() : null;
   const num = chapterParam
     ? Number(chapterParam)
@@ -27,7 +28,7 @@ function ReviewContent() {
     );
   }
 
-  return <ReviewFlow chapter={chapter} />;
+  return <ReviewFlow chapter={chapter} replaceToday={replaceToday} />;
 }
 
 export default function ReviewPage() {

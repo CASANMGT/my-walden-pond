@@ -32,7 +32,7 @@ export default function TodayPage() {
     setTodayEntryId(todayEntry?.id ?? null);
     setReflectionCount(entries.length);
     setWeeklySummary(computeWeeklySummary(entries));
-    setShowWeeklyPreview(entries.length >= 2);
+    setShowWeeklyPreview(computeWeeklySummary(entries).reviewCount >= 1 && entries.length >= 2);
     const dates = new Set(entries.map((e) => e.date));
     let s = 0;
     const d = new Date();

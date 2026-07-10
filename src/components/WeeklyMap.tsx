@@ -1,5 +1,7 @@
+import Link from "next/link";
 import type { WeeklySummary } from "@/types";
 import { Cog, Leaf, Sun } from "lucide-react";
+import { formatDateKey } from "@/lib/date";
 import { PondIllustration } from "./PondIllustration";
 
 type Props = {
@@ -67,15 +69,17 @@ export function WeeklyMap({ summary }: Props) {
           <h2 className="font-serif text-base text-pond-900">Recent Days</h2>
           <ul className="mt-3 space-y-1">
             {summary.days.map((d) => (
-              <li
-                key={d.date}
-                className="flex items-center justify-between rounded-xl px-2 py-2.5 text-sm transition hover:bg-mist/40"
-              >
-                <span className="text-ink/45">{d.date}</span>
-                <span className="flex items-center gap-1.5 font-medium text-ink/75">
-                  <Leaf className="h-3 w-3 text-moss" />
-                  {d.themeName}
-                </span>
+              <li key={d.date}>
+                <Link
+                  href={`/entries/${d.entryId}`}
+                  className="flex items-center justify-between rounded-xl px-2 py-2.5 text-sm transition hover:bg-mist/40"
+                >
+                  <span className="text-ink/45">{formatDateKey(d.date)}</span>
+                  <span className="flex items-center gap-1.5 font-medium text-ink/75">
+                    <Leaf className="h-3 w-3 text-moss" />
+                    {d.themeName}
+                  </span>
+                </Link>
               </li>
             ))}
           </ul>

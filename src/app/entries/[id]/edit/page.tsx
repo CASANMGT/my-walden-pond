@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { DetailHeader } from "@/components/DetailHeader";
 import { EntryEditForm } from "@/components/EntryEditForm";
 import { getEntryById } from "@/lib/storage";
+import { formatDateKey } from "@/lib/date";
 
 export default function EntryEditPage() {
   const params = useParams();
@@ -29,19 +30,17 @@ export default function EntryEditPage() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-mist/70 bg-paper/92 px-4 py-3 backdrop-blur-lg">
-        <Link
-          href={`/entries/${entry.id}`}
-          className="flex items-center gap-2 text-sm text-ink/55"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Cancel
-        </Link>
-      </header>
+      <DetailHeader
+        backHref={`/entries/${entry.id}`}
+        backLabel="Back"
+        center={formatDateKey(entry.date)}
+      />
 
       <div className="card-elevated mx-4 mt-4 rounded-3xl p-5">
         <h1 className="font-serif text-xl text-pond-900">Edit reflection</h1>
-        <p className="mt-1 text-sm text-ink/50">{entry.date} · Ch. {entry.chapterNumber}</p>
+        <p className="mt-1 text-sm text-ink/50">
+          {entry.chapterTitle} · Ch. {entry.chapterNumber}
+        </p>
         <div className="mt-6">
           <EntryEditForm entry={entry} />
         </div>

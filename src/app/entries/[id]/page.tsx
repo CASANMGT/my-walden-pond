@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, Download, Leaf, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { Download, Leaf, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { DetailHeader } from "@/components/DetailHeader";
 import { EntryDetailView } from "@/components/EntryDetailView";
 import {
   downloadMarkdown,
@@ -11,6 +12,7 @@ import {
   exportEntryToMarkdown,
 } from "@/lib/exportMarkdown";
 import { deleteEntry, getEntryById } from "@/lib/storage";
+import { formatDateKey, toDateKey } from "@/lib/date";
 
 export default function EntryDetailPage() {
   const params = useParams();
@@ -34,6 +36,8 @@ export default function EntryDetailPage() {
     );
   }
 
+  const isToday = entry.date === toDateKey();
+
   function handleExport() {
     const md = exportEntryToMarkdown(entry!);
     downloadMarkdown(md, entryMarkdownFilename(entry!));
@@ -48,13 +52,14 @@ export default function EntryDetailPage() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 flex items-center justify-between border-b border-mist/70 bg-paper/92 px-4 py-3 backdrop-blur-lg">
-        <Link href="/entries" className="flex items-center gap-2 text-sm text-ink/55">
-          <ArrowLeft className="h-4 w-4" />
-          Journal
-        </Link>
-        <span className="text-xs text-ink/45">{entry.date}</span>
-        <div className="relative">
+      <DetailHeader
+        backHref="/entries"
+        backLabel="Journal"
+        center={formatDateKey(entry.date)}
+      />
+
+      <div className="relative">
+        <div className="absolute right-4 top-0 z-10">
           <button
             type="button"
             onClick={() => setMenuOpen((o) => !o)}
@@ -103,24 +108,34 @@ export default function EntryDetailPage() {
             </>
           )}
         </div>
-      </header>
+      </div>
 
       <article className="card-elevated mx-4 mt-4 rounded-3xl p-5">
         <EntryDetailView entry={entry} />
       </article>
 
       <div className="space-y-3 px-4 py-6">
-        <Link href={`/entries/${entry.id}/edit`} className="btn-secondary">
+        <Link href={`/entries/${entry.id}/edit`} className="btn-primary">
           <Pencil className="h-4 w-4" />
           Edit reflection
         </Link>
-        <Link
-          href={`/review?chapter=${entry.chapterNumber}`}
-          className="btn-primary"
-        >
-          <Leaf className="h-4 w-4" />
-          Review Again
-        </Link>
+        {isToday ? (
+          <Link
+            href={`/review?chapter=${entry.chapterNumber}&replace=1`}
+            className="btn-secondary"
+          >
+            <Leaf className="h-4 w-4" />
+            Replace today&apos;s reflection
+          </Link>
+        ) : (
+          <Link
+            href={`/review?chapter=${entry.chapterNumber}`}
+            className="btn-secondary"
+          >
+            <Leaf className="h-4 w-4" />
+            Reflect on this chapter again
+          </Link>
+        )}
         <button type="button" onClick={handleExport} className="btn-secondary">
           <Download className="h-4 w-4" />
           Export as Markdown

@@ -73,7 +73,7 @@ export type WeeklySummary = {
   avgNature: number;
   avgMargin: number;
   suggestedPractice: string;
-  days: { date: string; themeName: string }[];
+  days: { date: string; themeName: string; entryId: string }[];
 };
 
 export type ReminderSettings = {

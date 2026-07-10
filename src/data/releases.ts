@@ -8,6 +8,18 @@ export type ReleaseNote = {
 
 export const releases: ReleaseNote[] = [
   {
+    version: "1.3.0",
+    date: "2026-07-10",
+    title: "One review per day, nav polish & edit chips",
+    added: [
+      "Enforced one reflection per day with edit/replace options",
+      "Weekly Map in bottom navigation",
+      "Menu and reminders on all detail pages",
+      "Edit form uses the same chip pickers as daily review",
+      "Friendly dates across journal and weekly map",
+    ],
+  },
+  {
     version: "1.2.0",
     date: "2026-07-10",
     title: "Onboarding, journal editing & weekly preview",

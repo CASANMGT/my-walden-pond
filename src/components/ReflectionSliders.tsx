@@ -10,7 +10,7 @@ type SliderProps = {
 
 function Slider({ label, lowLabel, highLabel, value, onChange }: SliderProps) {
   return (
-    <div className="space-y--2">
+    <div className="space-y-2">
       <div className="flex items-center justify-between">
         <span className="text-sm font-medium text-ink/80">{label}</span>
         <span className="text-sm tabular-nums text-moss">{value}/5</span>

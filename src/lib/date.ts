@@ -7,6 +7,18 @@ export function formatDisplayDate(date: Date = new Date()): string {
   });
 }
 
+/** Friendly label for stored YYYY-MM-DD keys */
+export function formatDateKey(dateKey: string): string {
+  const [year, month, day] = dateKey.split("-").map(Number);
+  if (!year || !month || !day) return dateKey;
+  return new Date(year, month - 1, day).toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 export function toDateKey(date: Date = new Date()): string {
   return date.toISOString().slice(0, 10);
 }

@@ -24,7 +24,20 @@ export function getEntries(): ReflectionEntry[] {
 }
 
 export function saveEntry(entry: ReflectionEntry): void {
+  const today = entry.date;
+  const existing = getEntries().find((e) => e.date === today);
+  if (existing) {
+    return;
+  }
   const entries = getEntries();
+  entries.unshift(entry);
+  localStorage.setItem(ENTRIES_KEY, JSON.stringify(entries));
+  updateProgressAfterSave(entry);
+}
+
+export function replaceTodayEntry(entry: ReflectionEntry): void {
+  const today = entry.date;
+  const entries = getEntries().filter((e) => e.date !== today);
   entries.unshift(entry);
   localStorage.setItem(ENTRIES_KEY, JSON.stringify(entries));
   updateProgressAfterSave(entry);

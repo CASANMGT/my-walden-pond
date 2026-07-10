@@ -54,8 +54,14 @@ export default function ChaptersPage() {
           {completed.length} reviewed
         </p>
 
-        <div className="space-y-2.5">
-          {filtered.map((chapter, i) => (
+        {filtered.length === 0 ? (
+          <div className="py-12 text-center">
+            <p className="font-serif text-lg text-ink/40">No chapters match.</p>
+            <p className="mt-2 text-sm text-ink/40">Try a different search term.</p>
+          </div>
+        ) : (
+          <div className="space-y-2.5">
+            {filtered.map((chapter, i) => (
             <div
               key={chapter.chapterNumber}
               className="animate-fade-up"
@@ -67,7 +73,8 @@ export default function ChaptersPage() {
               />
             </div>
           ))}
-        </div>
+          </div>
+        )}
       </div>
     </>
   );

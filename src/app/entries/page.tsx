@@ -46,7 +46,11 @@ export default function EntriesPage() {
           placeholder="Search entries..."
           className="w-full rounded-2xl border border-mist bg-white/80 px-4 py-3.5 text-sm shadow-sm outline-none focus:border-pond-500/50 focus:ring-2 focus:ring-pond-500/10"
         />
-        <p className="text-xs text-ink/45">{filtered.length} total</p>
+        <p className="text-xs text-ink/45">
+          {query.trim()
+            ? `${filtered.length} of ${entries.length} reflection${entries.length !== 1 ? "s" : ""}`
+            : `${entries.length} reflection${entries.length !== 1 ? "s" : ""}`}
+        </p>
 
         {entries.length === 0 ? (
           <div className="py-12 text-center">

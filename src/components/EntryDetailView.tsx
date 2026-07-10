@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReflectionEntry } from "@/types";
+import { formatDateKey } from "@/lib/date";
 import { Cog, Leaf, TreePine, Waves } from "lucide-react";
 
 type Props = {
@@ -13,7 +14,7 @@ export function EntryDetailView({ entry, compact }: Props) {
     <div className="space-y-5">
       <div>
         <div className="flex items-center gap-2 text-xs text-ink/45">
-          <span>{entry.date}</span>
+          <span>{formatDateKey(entry.date)}</span>
           <span className="h-1 w-1 rounded-full bg-mist" />
           <span>Chapter {entry.chapterNumber}</span>
         </div>

@@ -1,5 +1,5 @@
 import type { ChapterModule } from "@/types";
-import { BookOpen, CheckCircle2, Leaf, Sun } from "lucide-react";
+import { BookOpen, CheckCircle2, Leaf, Pencil, Sun } from "lucide-react";
 import Link from "next/link";
 import { PondIllustration } from "./PondIllustration";
 import { LessonChecklist, QuoteBlock } from "./QuoteBlock";
@@ -86,10 +86,17 @@ export function DailyLessonCard({
               View today&apos;s reflection
             </Link>
             <Link
-              href={`/review?chapter=${chapter.chapterNumber}`}
+              href={`/entries/${todayEntryId}/edit`}
               className="btn-secondary"
             >
-              Review again anyway
+              <Pencil className="h-4 w-4" />
+              Edit today&apos;s reflection
+            </Link>
+            <Link
+              href={`/review?chapter=${chapter.chapterNumber}&replace=1`}
+              className="flex w-full items-center justify-center py-2 text-sm text-moss transition hover:text-pond-700"
+            >
+              Replace today&apos;s reflection
             </Link>
           </>
         ) : (

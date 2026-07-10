@@ -5,10 +5,11 @@ import { ThemeIcon } from "./ThemeIcon";
 
 type Props = {
   theme: Theme;
+  index: number;
   completedCount: number;
 };
 
-export function ThemeCard({ theme, completedCount }: Props) {
+export function ThemeCard({ theme, index, completedCount }: Props) {
   const pct = Math.round((completedCount / theme.chapterNumbers.length) * 100);
 
   return (
@@ -20,7 +21,9 @@ export function ThemeCard({ theme, completedCount }: Props) {
         <ThemeIcon themeId={theme.id} className="h-5 w-5" />
       </div>
       <div className="min-w-0 flex-1">
-        <h3 className="font-serif text-base text-pond-900">{theme.name}</h3>
+        <h3 className="font-serif text-base text-pond-900">
+          {index}. {theme.name}
+        </h3>
         <p className="mt-0.5 line-clamp-2 text-sm leading-snug text-ink/55">
           {theme.coreQuestion}
         </p>

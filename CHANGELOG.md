@@ -4,6 +4,15 @@ All notable changes to **My Walden Pond** are documented here.
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-07-10
+
+### Added
+- One reflection per day enforcement with replace flow
+- Weekly Map in bottom nav; Themes in side menu
+- DetailHeader with menu on chapter, theme, entry, and review pages
+- Chip-based journal editing matching review flow
+- Human-readable dates in journal and weekly map
+
 ## [1.2.0] - 2026-07-10
 
 ### Added

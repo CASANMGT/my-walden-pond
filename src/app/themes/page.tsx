@@ -30,12 +30,17 @@ export default function ThemesPage() {
         </div>
 
         <div className="space-y-3">
-          {themes.map((theme) => {
+          {themes.map((theme, i) => {
             const count = theme.chapterNumbers.filter((n) =>
               completed.includes(n)
             ).length;
             return (
-              <ThemeCard key={theme.id} theme={theme} completedCount={count} />
+              <ThemeCard
+                key={theme.id}
+                theme={theme}
+                index={i + 1}
+                completedCount={count}
+              />
             );
           })}
         </div>

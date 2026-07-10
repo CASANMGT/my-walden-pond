@@ -4,32 +4,37 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import {
-  ArrowLeft,
   ArrowRight,
   Check,
   Leaf,
   Lightbulb,
   ListChecks,
+  Pencil,
   Sun,
   Zap,
 } from "lucide-react";
 import { getChapterByNumber } from "@/data/chapters";
-import { getProgress } from "@/lib/storage";
+import { getEntryForDate, getProgress } from "@/lib/storage";
+import { DetailHeader } from "@/components/DetailHeader";
 import { PondIllustration } from "@/components/PondIllustration";
 import { LessonChecklist, QuoteBlock } from "@/components/QuoteBlock";
 import { ThemeIcon } from "@/components/ThemeIcon";
+import { toDateKey } from "@/lib/date";
 
 export default function ChapterDetailPage() {
   const params = useParams();
   const num = Number(params.number);
   const chapter = getChapterByNumber(num);
   const [completed, setCompleted] = useState(false);
+  const [todayEntryId, setTodayEntryId] = useState<string | null>(null);
 
   useEffect(() => {
     if (chapter) {
       setCompleted(
         getProgress().completedChapterNumbers.includes(chapter.chapterNumber)
       );
+      const today = getEntryForDate(toDateKey());
+      setTodayEntryId(today?.id ?? null);
     }
   }, [chapter]);
 
@@ -46,15 +51,7 @@ export default function ChapterDetailPage() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-mist/70 bg-paper/92 px-4 py-3 backdrop-blur-lg">
-        <Link
-          href="/chapters"
-          className="flex items-center gap-2 text-sm text-ink/55"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          All Lessons
-        </Link>
-      </header>
+      <DetailHeader backHref="/chapters" backLabel="Lessons" center={`Ch. ${chapter.chapterNumber}`} />
 
       <article className="animate-fade-up space-y-6 px-4 py-5">
         <div className="card-elevated overflow-hidden rounded-3xl">
@@ -149,13 +146,32 @@ export default function ChapterDetailPage() {
         </section>
 
         <div className="animate-fade-up stagger-4 space-y-3 pb-6">
-          <Link
-            href={`/review?chapter=${chapter.chapterNumber}`}
-            className="btn-primary"
-          >
-            <Leaf className="h-4 w-4" />
-            Begin Daily Review
-          </Link>
+          {todayEntryId ? (
+            <>
+              <Link href={`/entries/${todayEntryId}`} className="btn-primary">
+                <Leaf className="h-4 w-4" />
+                View today&apos;s reflection
+              </Link>
+              <Link href={`/entries/${todayEntryId}/edit`} className="btn-secondary">
+                <Pencil className="h-4 w-4" />
+                Edit today&apos;s reflection
+              </Link>
+              <Link
+                href={`/review?chapter=${chapter.chapterNumber}&replace=1`}
+                className="flex w-full items-center justify-center py-2 text-sm text-moss hover:text-pond-700"
+              >
+                Replace today&apos;s reflection
+              </Link>
+            </>
+          ) : (
+            <Link
+              href={`/review?chapter=${chapter.chapterNumber}`}
+              className="btn-primary"
+            >
+              <Leaf className="h-4 w-4" />
+              Begin daily review
+            </Link>
+          )}
           {chapter.chapterNumber < 50 && (
             <Link
               href={`/chapters/${chapter.chapterNumber + 1}`}

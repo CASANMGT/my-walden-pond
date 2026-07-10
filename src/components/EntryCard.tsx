@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReflectionEntry } from "@/types";
+import { formatDateKey } from "@/lib/date";
 import { ChevronRight, Cog, Leaf, Trash2, TreePine } from "lucide-react";
 
 type Props = {
@@ -13,7 +14,7 @@ export function EntryCard({ entry, onDelete }: Props) {
       <div className="flex items-start gap-2">
         <Link href={`/entries/${entry.id}`} className="min-w-0 flex-1">
           <div className="flex items-center gap-2 text-xs text-ink/45">
-            <span>{entry.date}</span>
+            <span>{formatDateKey(entry.date)}</span>
             <span className="h-1 w-1 rounded-full bg-mist" />
             <span>Ch. {entry.chapterNumber}</span>
           </div>

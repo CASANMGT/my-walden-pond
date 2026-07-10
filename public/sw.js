@@ -1,4 +1,4 @@
-const CACHE_NAME = "walden-pond-v4";
+const CACHE_NAME = "walden-pond-v5";
 
 const PRECACHE_URLS = [
   "/",

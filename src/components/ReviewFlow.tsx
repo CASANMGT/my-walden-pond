@@ -1,14 +1,20 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Droplets, Leaf } from "lucide-react";
-import type { ChapterModule } from "@/types";
+import { ArrowRight, Droplets, Leaf, Pencil } from "lucide-react";
+import type { ChapterModule, ReflectionEntry } from "@/types";
+import { DetailHeader } from "./DetailHeader";
 import { ReflectionOptions, SingleSelectOptions } from "./ReflectionOptions";
 import { ReflectionSliders } from "./ReflectionSliders";
 import { NaturePractice } from "./NaturePractice";
-import { saveEntry } from "@/lib/storage";
+import {
+  getEntryForDate,
+  replaceTodayEntry,
+  saveEntry,
+} from "@/lib/storage";
 import { toDateKey } from "@/lib/date";
+import { formatSelection, mergeOptions } from "@/lib/selection";
 import { mechanicalOptions, natureOptions, waldenOptions } from "@/data/options";
 
 const STEPS = ["learning", "walden", "mechanical", "nature", "sliders", "practice"] as const;
@@ -16,11 +22,14 @@ type Step = (typeof STEPS)[number];
 
 type Props = {
   chapter: ChapterModule;
+  replaceToday?: boolean;
 };
 
-export function ReviewFlow({ chapter }: Props) {
+export function ReviewFlow({ chapter, replaceToday }: Props) {
   const [stepIndex, setStepIndex] = useState(0);
   const step = STEPS[stepIndex];
+  const [todayEntry, setTodayEntry] = useState<ReflectionEntry | undefined>();
+  const [mounted, setMounted] = useState(false);
 
   const [learning, setLearning] = useState("");
   const [walden, setWalden] = useState<string[]>([]);
@@ -32,17 +41,23 @@ export function ReviewFlow({ chapter }: Props) {
   const [practiceDone, setPracticeDone] = useState(false);
   const [note, setNote] = useState("");
   const [saved, setSaved] = useState(false);
+  const [savedEntryId, setSavedEntryId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setTodayEntry(getEntryForDate(toDateKey()));
+    setMounted(true);
+  }, []);
 
   const waldenOpts = useMemo(
-    () => [...new Set([...chapter.waldenOptions, ...waldenOptions])],
+    () => mergeOptions(chapter.waldenOptions, waldenOptions),
     [chapter]
   );
   const mechOpts = useMemo(
-    () => [...new Set([...chapter.mechanicalOptions, ...mechanicalOptions])],
+    () => mergeOptions(chapter.mechanicalOptions, mechanicalOptions),
     [chapter]
   );
   const natureOpts = useMemo(
-    () => [...new Set([...chapter.natureOptions, ...natureOptions])],
+    () => mergeOptions(chapter.natureOptions, natureOptions),
     [chapter]
   );
 
@@ -54,18 +69,12 @@ export function ReviewFlow({ chapter }: Props) {
     return true;
   }, [step, learning, walden, mechanical, nature]);
 
-  function formatSelection(selected: string[]) {
-    const custom = selected.find((s) => s !== "Custom" && !waldenOptions.includes(s) && !mechanicalOptions.includes(s) && !natureOptions.includes(s));
-    const labels = selected.filter((s) => s !== "Custom" && s !== custom);
-    if (custom) labels.push(custom);
-    if (selected.includes("Custom") && !custom) labels.push("Custom");
-    return labels.join(", ");
-  }
-
-  function handleSave() {
-    const entry = {
-      id: crypto.randomUUID(),
-      date: toDateKey(),
+  function buildEntry(): ReflectionEntry {
+    const today = toDateKey();
+    const existing = todayEntry;
+    return {
+      id: replaceToday && existing ? existing.id : crypto.randomUUID(),
+      date: today,
       chapterNumber: chapter.chapterNumber,
       chapterTitle: chapter.chapterTitle,
       themeId: chapter.themeId,
@@ -79,10 +88,60 @@ export function ReviewFlow({ chapter }: Props) {
       marginScore: marginScore,
       practiceCompleted: practiceDone,
       optionalNote: note.trim() || undefined,
-      createdAt: new Date().toISOString(),
+      createdAt: replaceToday && existing ? existing.createdAt : new Date().toISOString(),
     };
-    saveEntry(entry);
+  }
+
+  function handleSave() {
+    const entry = buildEntry();
+    if (replaceToday && todayEntry) {
+      replaceTodayEntry(entry);
+    } else {
+      saveEntry(entry);
+    }
+    setSavedEntryId(entry.id);
     setSaved(true);
+  }
+
+  if (!mounted) {
+    return (
+      <div className="flex min-h-dvh items-center justify-center text-sm text-ink/40">
+        Preparing review...
+      </div>
+    );
+  }
+
+  if (todayEntry && !replaceToday) {
+    return (
+      <div className="pond-gradient flex min-h-dvh flex-col">
+        <DetailHeader backHref="/" backLabel="Today" />
+        <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
+          <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-pond-50">
+            <Leaf className="h-10 w-10 text-pond-500" strokeWidth={1.5} />
+          </div>
+          <h1 className="font-serif text-2xl text-pond-900">You&apos;ve reflected today</h1>
+          <p className="mt-2 max-w-xs text-sm leading-relaxed text-ink/55">
+            One reflection per day keeps your streak and weekly map clear. Edit
+            today&apos;s entry or replace it if you want a fresh pass.
+          </p>
+          <div className="mt-8 w-full max-w-xs space-y-3">
+            <Link href={`/entries/${todayEntry.id}`} className="btn-primary">
+              View today&apos;s reflection
+            </Link>
+            <Link href={`/entries/${todayEntry.id}/edit`} className="btn-secondary">
+              <Pencil className="h-4 w-4" />
+              Edit today&apos;s reflection
+            </Link>
+            <Link
+              href={`/review?chapter=${chapter.chapterNumber}&replace=1`}
+              className="flex w-full items-center justify-center py-2 text-sm text-moss hover:text-pond-700"
+            >
+              Replace today&apos;s reflection
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (saved) {
@@ -93,35 +152,48 @@ export function ReviewFlow({ chapter }: Props) {
         </div>
         <h1 className="font-serif text-3xl text-pond-900">Saved.</h1>
         <p className="mt-2 text-ink/55">Your pond is still here.</p>
-        <Link href="/" className="btn-primary mt-10 max-w-xs">
-          Return to Today
-        </Link>
+        <div className="mt-10 flex w-full max-w-xs flex-col gap-3">
+          {savedEntryId && (
+            <Link href={`/entries/${savedEntryId}`} className="btn-primary">
+              View reflection
+            </Link>
+          )}
+          <Link href="/" className="btn-secondary">
+            Return to Today
+          </Link>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="pond-gradient min-h-dvh">
-      <header className="sticky top-0 z-40 border-b border-mist/70 bg-paper/92 px-4 py-3 backdrop-blur-lg">
-        <div className="flex items-center gap-3">
-          <Link href="/" className="rounded-lg p-1 text-ink/50 hover:bg-mist/60">
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
-          <div className="flex-1 text-center">
-            <p className="section-label">Daily Review</p>
-            <p className="text-sm font-medium text-pond-900">
-              Step {stepIndex + 1} of {STEPS.length}
-            </p>
-          </div>
-          <div className="w-9" />
-        </div>
+      <DetailHeader
+        backHref="/"
+        backLabel="Today"
+        center={`Ch. ${chapter.chapterNumber}`}
+      />
+
+      <div className="border-b border-mist/70 bg-paper/80 px-4 py-3">
+        <p className="section-label text-center">Daily Review</p>
+        <p className="text-center font-serif text-sm text-pond-900">
+          {chapter.chapterTitle}
+        </p>
+        <p className="mt-2 text-center text-xs text-ink/45">
+          Step {stepIndex + 1} of {STEPS.length}
+        </p>
         <div className="mt-3 h-1 overflow-hidden rounded-full bg-mist">
           <div
             className="h-full rounded-full bg-gradient-to-r from-pond-500 to-pond-700 transition-all duration-500"
             style={{ width: `${((stepIndex + 1) / STEPS.length) * 100}%` }}
           />
         </div>
-      </header>
+        {replaceToday && (
+          <p className="mt-2 text-center text-[11px] text-sunlight">
+            Replacing today&apos;s reflection
+          </p>
+        )}
+      </div>
 
       <div className="space-y-6 px-4 py-6">
         {step === "learning" && (
@@ -131,6 +203,12 @@ export function ReviewFlow({ chapter }: Props) {
               title="What resonates from today's lesson?"
               subtitle="Choose one takeaway."
             />
+            <Link
+              href={`/chapters/${chapter.chapterNumber}`}
+              className="block text-center text-xs font-medium text-pond-700 underline"
+            >
+              Read today&apos;s lesson
+            </Link>
             <SingleSelectOptions
               options={chapter.learningOptions}
               selected={learning}
@@ -258,7 +336,7 @@ export function ReviewFlow({ chapter }: Props) {
               className="btn-primary flex flex-1 items-center gap-2"
             >
               <Leaf className="h-4 w-4" />
-              Save My Review
+              {replaceToday ? "Replace reflection" : "Save my review"}
             </button>
           )}
         </div>

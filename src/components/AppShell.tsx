@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import {
   Bell,
   BookOpen,
-  Layers,
+  Map,
   Menu,
   NotebookPen,
   Settings,
@@ -22,7 +22,7 @@ const navItems = [
   { href: "/", label: "Today", icon: TreePine },
   { href: "/chapters", label: "Lessons", icon: BookOpen },
   { href: "/entries", label: "Journal", icon: NotebookPen },
-  { href: "/themes", label: "Themes", icon: Layers },
+  { href: "/map", label: "Map", icon: Map },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 
@@ -52,7 +52,7 @@ export function BottomNav() {
             <Link
               key={href}
               href={href}
-              className={`flex flex-col items-center gap-0.5 rounded-2xl px-3 py-2 text-[10px] font-medium transition-all ${
+              className={`flex flex-col items-center gap-0.5 rounded-2xl px-3 py-2 text-[11px] font-medium transition-all ${
                 active
                   ? "bg-pond-700/8 text-pond-700"
                   : "text-ink/45 hover:text-ink/65"

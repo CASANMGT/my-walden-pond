@@ -1,5 +1,4 @@
 import type { ReflectionEntry, WeeklySummary } from "@/types";
-import { getEntriesFromLastDays } from "./date";
 
 function mode(values: string[]): string | null {
   if (!values.length) return null;
@@ -52,28 +51,36 @@ export function suggestPractice(
 }
 
 export function computeWeeklySummary(entries: ReflectionEntry[]): WeeklySummary {
-  const recent = getEntriesFromLastDays(entries, 7) as ReflectionEntry[];
-  const weekEntries = recent.filter((e) =>
-    entries.some((full) => full.id === (e as ReflectionEntry).id)
-  );
   const week = entries.filter((e) => {
     const cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - 7);
     return e.date >= cutoff.toISOString().slice(0, 10);
   });
 
-  const mostCommonMechanical = mode(week.map((e) => e.mechanicalArea));
-  const mostCommonAnchor = mode(week.map((e) => e.naturalAnchor));
+  const byDate = new Map<string, ReflectionEntry>();
+  for (const entry of week) {
+    if (!byDate.has(entry.date)) {
+      byDate.set(entry.date, entry);
+    }
+  }
+  const uniqueWeek = Array.from(byDate.values());
+
+  const mostCommonMechanical = mode(uniqueWeek.map((e) => e.mechanicalArea));
+  const mostCommonAnchor = mode(uniqueWeek.map((e) => e.naturalAnchor));
 
   return {
-    reviewCount: week.length,
-    mostCommonTheme: mode(week.map((e) => e.themeName)),
+    reviewCount: uniqueWeek.length,
+    mostCommonTheme: mode(uniqueWeek.map((e) => e.themeName)),
     mostCommonMechanical,
     mostCommonAnchor,
-    avgMechanical: avg(week.map((e) => e.mechanicalScore)),
-    avgNature: avg(week.map((e) => e.natureScore)),
-    avgMargin: avg(week.map((e) => e.marginScore)),
+    avgMechanical: avg(uniqueWeek.map((e) => e.mechanicalScore)),
+    avgNature: avg(uniqueWeek.map((e) => e.natureScore)),
+    avgMargin: avg(uniqueWeek.map((e) => e.marginScore)),
     suggestedPractice: suggestPractice(mostCommonMechanical, mostCommonAnchor),
-    days: week.map((e) => ({ date: e.date, themeName: e.themeName })),
+    days: uniqueWeek.map((e) => ({
+      date: e.date,
+      themeName: e.themeName,
+      entryId: e.id,
+    })),
   };
 }
