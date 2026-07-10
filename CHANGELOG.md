@@ -4,6 +4,13 @@ All notable changes to **My Walden Pond** are documented here.
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-07-10
+
+### Added
+- In-app About & Version page with release history
+- What's new banner on home after updates
+- Version panel in Settings and side menu
+
 ## [1.1.0] - 2026-07-10
 
 ### Added

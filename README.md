@@ -45,7 +45,7 @@ vercel
 
 ## Version control
 
-- **Current version:** `1.1.0` (see `package.json`)
+- **Current version:** `1.1.1` (see `package.json`)
 - **Changelog:** [CHANGELOG.md](./CHANGELOG.md)
 - **Repository:** [github.com/CASANMGT/my-walden-pond](https://github.com/CASANMGT/my-walden-pond)
 - **Live app:** [my-walden-pond.vercel.app](https://my-walden-pond.vercel.app)

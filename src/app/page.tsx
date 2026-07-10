@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { AppHeader } from "@/components/AppShell";
 import { DailyLessonCard } from "@/components/DailyLessonCard";
+import { WhatsNewBanner } from "@/components/WhatsNewBanner";
 import { getChapterByNumber } from "@/data/chapters";
 import { getEntries, getEntryForDate, getProgress } from "@/lib/storage";
 import { formatDisplayDate, getDayNumber, toDateKey } from "@/lib/date";
@@ -48,6 +49,7 @@ export default function TodayPage() {
   return (
     <>
       <AppHeader />
+      <WhatsNewBanner />
       <p className="px-4 pt-2 text-xs text-ink/50">{formatDisplayDate()}</p>
       <DailyLessonCard
         chapter={chapter}

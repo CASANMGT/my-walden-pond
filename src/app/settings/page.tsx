@@ -14,7 +14,7 @@ import {
   saveReminderSettings,
 } from "@/lib/reminders";
 import { getEntries, resetAllData } from "@/lib/storage";
-import { APP_VERSION } from "@/lib/version";
+import { VersionPanel } from "@/components/VersionPanel";
 import type { ReminderSettings } from "@/types";
 import { Bell, Download, Map, Trash2, Wifi } from "lucide-react";
 
@@ -169,16 +169,7 @@ export default function SettingsPage() {
           </Link>
         </section>
 
-        <section className="card-elevated rounded-2xl p-5">
-          <h2 className="font-serif text-lg text-pond-900">About My Walden Pond</h2>
-          <p className="mt-3 text-sm leading-relaxed text-ink/70">
-            A personal study and daily reflection companion inspired by{" "}
-            <em>The Cure at Walden Pond</em> by Thomas Moore.
-          </p>
-          <p className="mt-3 text-xs text-ink/40">
-            Version {APP_VERSION} · Offline-first PWA
-          </p>
-        </section>
+        <VersionPanel compact />
 
         <section className="rounded-2xl border border-mist bg-mist/30 p-5">
           <h2 className="text-sm font-medium text-ink/70">Copyright note</h2>

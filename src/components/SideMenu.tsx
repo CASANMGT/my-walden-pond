@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import {
   BookOpen,
   Download,
+  GitBranch,
+  Info,
   Layers,
   Map,
   NotebookPen,
@@ -14,7 +16,8 @@ import {
   WifiOff,
   X,
 } from "lucide-react";
-import { APP_VERSION } from "@/lib/version";
+import { getVersionLabel, hasUnseenUpdate } from "@/lib/version";
+import { useEffect, useState } from "react";
 
 const menuLinks = [
   { href: "/", label: "Today", icon: TreePine },
@@ -22,6 +25,7 @@ const menuLinks = [
   { href: "/entries", label: "Journal", icon: NotebookPen },
   { href: "/themes", label: "Themes", icon: Layers },
   { href: "/map", label: "Weekly Map", icon: Map },
+  { href: "/about", label: "About & Version", icon: Info },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 
@@ -34,6 +38,11 @@ type Props = {
 
 export function SideMenu({ open, onClose, isOnline, entryCount }: Props) {
   const pathname = usePathname();
+  const [showNew, setShowNew] = useState(false);
+
+  useEffect(() => {
+    if (open) setShowNew(hasUnseenUpdate());
+  }, [open]);
 
   if (!open) return null;
 
@@ -116,7 +125,19 @@ export function SideMenu({ open, onClose, isOnline, entryCount }: Props) {
             <Download className="h-4 w-4" />
             Export reflections
           </Link>
-          <p className="px-1 text-center text-[10px] text-ink/35">v{APP_VERSION}</p>
+          <Link
+            href="/about"
+            onClick={onClose}
+            className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm text-ink/60 hover:bg-mist/50"
+          >
+            <GitBranch className="h-4 w-4" />
+            {getVersionLabel()}
+            {showNew && (
+              <span className="rounded-full bg-sunlight/40 px-1.5 py-0.5 text-[9px] font-medium text-pond-900">
+                New
+              </span>
+            )}
+          </Link>
           <p className="px-1 text-center font-serif text-xs italic text-moss">
             Simplify, simplify.
           </p>
