@@ -14,6 +14,7 @@ import {
   saveReminderSettings,
 } from "@/lib/reminders";
 import { getEntries, resetAllData } from "@/lib/storage";
+import { APP_VERSION } from "@/lib/version";
 import type { ReminderSettings } from "@/types";
 import { Bell, Download, Map, Trash2, Wifi } from "lucide-react";
 
@@ -174,7 +175,9 @@ export default function SettingsPage() {
             A personal study and daily reflection companion inspired by{" "}
             <em>The Cure at Walden Pond</em> by Thomas Moore.
           </p>
-          <p className="mt-3 text-xs text-ink/40">Version 1.1.0 · Offline-first PWA</p>
+          <p className="mt-3 text-xs text-ink/40">
+            Version {APP_VERSION} · Offline-first PWA
+          </p>
         </section>
 
         <section className="rounded-2xl border border-mist bg-mist/30 p-5">

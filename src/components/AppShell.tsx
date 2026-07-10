@@ -15,6 +15,7 @@ import {
 import { SideMenu } from "./SideMenu";
 import { OfflineBanner, PwaBootstrap, useOnlineStatus } from "./PwaBootstrap";
 import { getEntries } from "@/lib/storage";
+import { APP_VERSION } from "@/lib/version";
 
 const navItems = [
   { href: "/", label: "Today", icon: TreePine },

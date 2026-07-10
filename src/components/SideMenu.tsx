@@ -14,6 +14,7 @@ import {
   WifiOff,
   X,
 } from "lucide-react";
+import { APP_VERSION } from "@/lib/version";
 
 const menuLinks = [
   { href: "/", label: "Today", icon: TreePine },
@@ -115,6 +116,7 @@ export function SideMenu({ open, onClose, isOnline, entryCount }: Props) {
             <Download className="h-4 w-4" />
             Export reflections
           </Link>
+          <p className="px-1 text-center text-[10px] text-ink/35">v{APP_VERSION}</p>
           <p className="px-1 text-center font-serif text-xs italic text-moss">
             Simplify, simplify.
           </p>

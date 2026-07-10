@@ -43,16 +43,31 @@ npm i -g vercel
 vercel
 ```
 
-## Deploy to GitHub
+## Version control
+
+- **Current version:** `1.1.0` (see `package.json`)
+- **Changelog:** [CHANGELOG.md](./CHANGELOG.md)
+- **Repository:** [github.com/CASANMGT/my-walden-pond](https://github.com/CASANMGT/my-walden-pond)
+- **Live app:** [my-walden-pond.vercel.app](https://my-walden-pond.vercel.app)
+
+Bump version:
 
 ```bash
-git init
-git add .
-git commit -m "Initial commit: My Walden Pond MVP"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/my-walden-pond.git
-git push -u origin main
+npm run version:patch   # 1.1.0 → 1.1.1
+npm run version:minor   # 1.1.0 → 1.2.0
+npm run version:major   # 1.1.0 → 2.0.0
 ```
+
+Then update `CHANGELOG.md`, commit, tag, and push:
+
+```bash
+git add .
+git commit -m "Release v1.1.1"
+git tag v1.1.1
+git push origin main --tags
+```
+
+CI runs on every push to `main` (lint + build).
 
 ## Copyright
 
