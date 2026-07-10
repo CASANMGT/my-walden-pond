@@ -35,6 +35,13 @@ export function deleteEntry(id: string): void {
   localStorage.setItem(ENTRIES_KEY, JSON.stringify(entries));
 }
 
+export function updateEntry(id: string, updates: Partial<ReflectionEntry>): void {
+  const entries = getEntries().map((e) =>
+    e.id === id ? { ...e, ...updates } : e
+  );
+  localStorage.setItem(ENTRIES_KEY, JSON.stringify(entries));
+}
+
 export function getEntryForDate(date: string): ReflectionEntry | undefined {
   return getEntries().find((e) => e.date === date);
 }

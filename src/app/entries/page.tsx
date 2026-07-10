@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { Leaf } from "lucide-react";
 import { AppHeader } from "@/components/AppShell";
 import { EntryCard } from "@/components/EntryCard";
-import { getEntries } from "@/lib/storage";
+import { deleteEntry, getEntries } from "@/lib/storage";
 import type { ReflectionEntry } from "@/types";
 
 export default function EntriesPage() {
@@ -20,9 +22,18 @@ export default function EntriesPage() {
     return (
       e.chapterTitle.toLowerCase().includes(q) ||
       e.themeName.toLowerCase().includes(q) ||
-      e.optionalNote?.toLowerCase().includes(q)
+      e.optionalNote?.toLowerCase().includes(q) ||
+      e.waldenPondToday.toLowerCase().includes(q) ||
+      e.mechanicalArea.toLowerCase().includes(q) ||
+      e.naturalAnchor.toLowerCase().includes(q)
     );
   });
+
+  function handleDelete(id: string) {
+    if (!confirm("Delete this reflection? This cannot be undone.")) return;
+    deleteEntry(id);
+    setEntries(getEntries());
+  }
 
   return (
     <>
@@ -37,17 +48,26 @@ export default function EntriesPage() {
         />
         <p className="text-xs text-ink/45">{filtered.length} total</p>
 
-        {filtered.length === 0 ? (
+        {entries.length === 0 ? (
           <div className="py-12 text-center">
             <p className="font-serif text-lg text-ink/40">No reflections yet.</p>
             <p className="mt-2 text-sm text-ink/40">
               Begin today&apos;s review to start your journal.
             </p>
+            <Link href="/" className="btn-primary mt-6 inline-flex">
+              <Leaf className="h-4 w-4" />
+              Go to Today
+            </Link>
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="py-12 text-center">
+            <p className="font-serif text-lg text-ink/40">No matches found.</p>
+            <p className="mt-2 text-sm text-ink/40">Try a different search term.</p>
           </div>
         ) : (
           <div className="space-y-3">
             {filtered.map((entry) => (
-              <EntryCard key={entry.id} entry={entry} />
+              <EntryCard key={entry.id} entry={entry} onDelete={handleDelete} />
             ))}
           </div>
         )}

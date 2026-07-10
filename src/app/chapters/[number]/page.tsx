@@ -11,6 +11,7 @@ import {
   Lightbulb,
   ListChecks,
   Sun,
+  Zap,
 } from "lucide-react";
 import { getChapterByNumber } from "@/data/chapters";
 import { getProgress } from "@/lib/storage";
@@ -90,6 +91,14 @@ export default function ChapterDetailPage() {
             <LessonChecklist items={chapter.learningOptions.slice(0, 3)} />
           </div>
         </div>
+
+        <section className="card-elevated animate-fade-up stagger-1 rounded-2xl border border-sunlight/30 bg-gradient-to-br from-sunlight/10 to-paper p-5">
+          <div className="mb-2 flex items-center gap-2 text-pond-800">
+            <Zap className="h-4 w-4 text-sunlight" strokeWidth={1.5} />
+            <h2 className="section-label">Why this matters today</h2>
+          </div>
+          <p className="text-sm leading-[1.75] text-ink/80">{chapter.modernProblem}</p>
+        </section>
 
         <section className="card-elevated animate-fade-up stagger-1 rounded-2xl p-5">
           <div className="mb-3 flex items-center gap-2 text-moss">

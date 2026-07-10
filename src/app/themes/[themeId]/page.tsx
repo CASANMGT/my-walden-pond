@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ArrowLeft, Check, ChevronRight } from "lucide-react";
+import { ArrowLeft, Check, ChevronRight, Target } from "lucide-react";
 import { AppHeader } from "@/components/AppShell";
 import { PondIllustration } from "@/components/PondIllustration";
 import { ThemeIcon } from "@/components/ThemeIcon";
@@ -64,6 +64,14 @@ export default function ThemeDetailPage() {
           <p className="relative z-10 mt-1 pl-6 font-serif text-lg leading-relaxed text-pond-900">
             {theme.coreQuestion}
           </p>
+        </div>
+
+        <div className="card-elevated rounded-2xl p-5">
+          <div className="mb-2 flex items-center gap-2 text-pond-700">
+            <Target className="h-4 w-4" strokeWidth={1.5} />
+            <h2 className="section-label text-pond-700">What you&apos;ll discover</h2>
+          </div>
+          <p className="text-sm leading-relaxed text-ink/75">{theme.outcome}</p>
         </div>
 
         <div>

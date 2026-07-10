@@ -35,9 +35,9 @@ export function EntryDetailView({ entry, compact }: Props) {
       </div>
 
       <div className="flex justify-between gap-3">
-        <ScoreRing label="Reflection" value={entry.mechanicalScore} icon={<Waves className="h-4 w-4" />} />
-        <ScoreRing label="Peace" value={entry.natureScore} icon={<Leaf className="h-4 w-4" />} />
-        <ScoreRing label="Clarity" value={entry.marginScore} icon={<TreePine className="h-4 w-4" />} />
+        <ScoreRing label="Mechanical" value={entry.mechanicalScore} icon={<Waves className="h-4 w-4" />} />
+        <ScoreRing label="Nature" value={entry.natureScore} icon={<Leaf className="h-4 w-4" />} />
+        <ScoreRing label="Margin" value={entry.marginScore} icon={<TreePine className="h-4 w-4" />} />
       </div>
 
       <div className="rounded-xl bg-pond-50/60 px-4 py-3 text-sm text-ink/70">

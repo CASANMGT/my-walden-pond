@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, Download, Leaf, MoreHorizontal, Trash2 } from "lucide-react";
+import { ArrowLeft, Download, Leaf, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { EntryDetailView } from "@/components/EntryDetailView";
 import {
   downloadMarkdown,
@@ -74,6 +74,17 @@ export default function EntryDetailPage() {
               <div className="absolute right-0 z-50 mt-1 w-44 overflow-hidden rounded-xl border border-mist bg-paper shadow-lg">
                 <button
                   type="button"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    router.push(`/entries/${entry.id}/edit`);
+                  }}
+                  className="flex w-full items-center gap-2 px-4 py-3 text-sm text-ink/70 hover:bg-mist/50"
+                >
+                  <Pencil className="h-4 w-4" />
+                  Edit
+                </button>
+                <button
+                  type="button"
                   onClick={handleExport}
                   className="flex w-full items-center gap-2 px-4 py-3 text-sm text-ink/70 hover:bg-mist/50"
                 >
@@ -99,6 +110,10 @@ export default function EntryDetailPage() {
       </article>
 
       <div className="space-y-3 px-4 py-6">
+        <Link href={`/entries/${entry.id}/edit`} className="btn-secondary">
+          <Pencil className="h-4 w-4" />
+          Edit reflection
+        </Link>
         <Link
           href={`/review?chapter=${entry.chapterNumber}`}
           className="btn-primary"

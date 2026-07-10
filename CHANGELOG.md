@@ -4,6 +4,15 @@ All notable changes to **My Walden Pond** are documented here.
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-07-10
+
+### Added
+- First-visit onboarding (3 screens)
+- One review per day UX with view-today shortcut
+- Weekly map preview on Today page
+- Journal edit page and list delete
+- Modern problem on chapter pages, outcome on theme pages
+
 ## [1.1.1] - 2026-07-10
 
 ### Added

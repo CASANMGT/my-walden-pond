@@ -8,6 +8,19 @@ export type ReleaseNote = {
 
 export const releases: ReleaseNote[] = [
   {
+    version: "1.2.0",
+    date: "2026-07-10",
+    title: "Onboarding, journal editing & weekly preview",
+    added: [
+      "3-screen welcome onboarding for first-time visitors",
+      "One review per day with view-today and review-again options",
+      "Weekly map preview card on Today after 2 reflections",
+      "Edit reflections — scores, answers, notes, and practice",
+      "Delete reflections from the journal list",
+      "Modern problem hooks on chapters and outcomes on themes",
+    ],
+  },
+  {
     version: "1.1.1",
     date: "2026-07-10",
     title: "In-app version & release notes",

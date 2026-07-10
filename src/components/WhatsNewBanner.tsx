@@ -1,16 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Sparkles, X } from "lucide-react";
 import { getLatestRelease } from "@/data/releases";
+import { hasCompletedOnboarding } from "@/lib/onboarding";
 import { getVersionLabel, hasUnseenUpdate, markVersionSeen } from "@/lib/version";
-import { useEffect, useState } from "react";
 
 export function WhatsNewBanner() {
   const [visible, setVisible] = useState(false);
   const release = getLatestRelease();
 
   useEffect(() => {
+    if (!hasCompletedOnboarding()) return;
     setVisible(hasUnseenUpdate());
   }, []);
 

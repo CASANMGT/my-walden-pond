@@ -1,28 +1,33 @@
 import type { ChapterModule } from "@/types";
-import { BookOpen, Leaf, Sun } from "lucide-react";
+import { BookOpen, CheckCircle2, Leaf, Sun } from "lucide-react";
 import Link from "next/link";
 import { PondIllustration } from "./PondIllustration";
 import { LessonChecklist, QuoteBlock } from "./QuoteBlock";
 
 type Props = {
   chapter: ChapterModule;
-  dayNumber: number;
+  reflectionCount: number;
   streak: number;
   hasReviewToday: boolean;
+  todayEntryId: string | null;
 };
 
 export function DailyLessonCard({
   chapter,
-  dayNumber,
+  reflectionCount,
   streak,
   hasReviewToday,
+  todayEntryId,
 }: Props) {
   return (
     <div className="animate-fade-up space-y-6 px-4 pt-5">
       <div className="text-center">
         <p className="section-label">Today&apos;s Walden</p>
-        <p className="mt-1 font-serif text-2xl text-pond-900">Today&apos;s Walden</p>
-        <p className="mt-0.5 text-sm text-ink/50">{dayNumber} days at the pond</p>
+        <p className="mt-0.5 text-sm text-ink/50">
+          {reflectionCount === 0
+            ? "Your first reflection awaits"
+            : `${reflectionCount} reflection${reflectionCount !== 1 ? "s" : ""} saved`}
+        </p>
       </div>
 
       <article className="card-elevated animate-fade-up stagger-1 overflow-hidden rounded-3xl">
@@ -55,8 +60,8 @@ export function DailyLessonCard({
           {streak > 0 && (
             <div className="rounded-xl bg-mist/50 px-4 py-3">
               <div className="mb-1.5 flex items-center justify-between text-xs">
-                <span className="text-ink/50">Daily Streak</span>
-                <span className="font-medium text-pond-700">{streak} Days</span>
+                <span className="text-ink/50">Daily streak</span>
+                <span className="font-medium text-pond-700">{streak} day{streak !== 1 ? "s" : ""}</span>
               </div>
               <div className="h-1 overflow-hidden rounded-full bg-white/80">
                 <div
@@ -69,14 +74,33 @@ export function DailyLessonCard({
         </div>
       </article>
 
-      <div className="animate-fade-up stagger-2 space-y-3 pb-6">
-        <Link href={`/review?chapter=${chapter.chapterNumber}`} className="btn-primary">
-          <Leaf className="h-4 w-4" />
-          {hasReviewToday ? "Review Again" : "Begin Today's Review"}
-        </Link>
+      <div className="animate-fade-up stagger-2 space-y-3 pb-2">
+        {hasReviewToday && todayEntryId ? (
+          <>
+            <div className="flex items-center gap-2 rounded-xl bg-pond-50/80 px-4 py-3 text-sm text-pond-800">
+              <CheckCircle2 className="h-4 w-4 shrink-0 text-pond-600" />
+              <span>You&apos;ve reflected today. Well done.</span>
+            </div>
+            <Link href={`/entries/${todayEntryId}`} className="btn-primary">
+              <Leaf className="h-4 w-4" />
+              View today&apos;s reflection
+            </Link>
+            <Link
+              href={`/review?chapter=${chapter.chapterNumber}`}
+              className="btn-secondary"
+            >
+              Review again anyway
+            </Link>
+          </>
+        ) : (
+          <Link href={`/review?chapter=${chapter.chapterNumber}`} className="btn-primary">
+            <Leaf className="h-4 w-4" />
+            Begin today&apos;s review
+          </Link>
+        )}
         <Link href="/themes" className="btn-secondary">
           <BookOpen className="h-4 w-4" />
-          Browse by Theme
+          Browse by theme
         </Link>
         <Link
           href="/chapters"

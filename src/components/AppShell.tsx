@@ -13,7 +13,9 @@ import {
   TreePine,
 } from "lucide-react";
 import { SideMenu } from "./SideMenu";
+import { OnboardingOverlay } from "./OnboardingOverlay";
 import { OfflineBanner, PwaBootstrap, useOnlineStatus } from "./PwaBootstrap";
+import { hasCompletedOnboarding } from "@/lib/onboarding";
 import { getEntries } from "@/lib/storage";
 
 const navItems = [
@@ -21,7 +23,7 @@ const navItems = [
   { href: "/chapters", label: "Lessons", icon: BookOpen },
   { href: "/entries", label: "Journal", icon: NotebookPen },
   { href: "/themes", label: "Themes", icon: Layers },
-  { href: "/settings", label: "Profile", icon: Settings },
+  { href: "/settings", label: "Settings", icon: Settings },
 ];
 
 type ShellContextValue = {
@@ -98,9 +100,11 @@ export function AppHeader({ title }: { title?: string }) {
 export function AppShell({ children }: { children: React.ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [entryCount, setEntryCount] = useState(0);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const online = useOnlineStatus();
 
   useEffect(() => {
+    setShowOnboarding(!hasCompletedOnboarding());
     setEntryCount(getEntries().length);
     const refresh = () => setEntryCount(getEntries().length);
     window.addEventListener("storage", refresh);
@@ -124,6 +128,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           isOnline={online}
           entryCount={entryCount}
         />
+        {showOnboarding && (
+          <OnboardingOverlay onComplete={() => setShowOnboarding(false)} />
+        )}
       </div>
     </ShellContext.Provider>
   );
